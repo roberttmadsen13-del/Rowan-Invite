@@ -427,7 +427,7 @@
         <div class="score-cell">
           <div class="label">📅 Date</div>
           <div class="value">Saturday, June 6</div>
-          <div class="par">2026</div>
+          <div class="par">2026 · <a href="#" onclick="addToCalendar();return false;" style="color:var(--gold);text-decoration:underline;">+ Add to Calendar</a></div>
         </div>
         <div class="score-cell">
           <div class="label">🕐 Tee Time</div>
@@ -464,7 +464,7 @@
           Entered the World
           <div class="sub">-5 days early — arrived ahead of schedule</div>
         </div>
-        <div class="score-badge ace">ACE</div>
+        <div class="score-badge eagle">EAGLE</div>
       </div>
 
       <div class="board-row">
@@ -565,6 +565,25 @@
 </div><!-- /wrap -->
 
 <script>
+  function addToCalendar() {
+    const ics = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'BEGIN:VEVENT',
+      'DTSTART:20260606T130000',
+      'DTEND:20260606T150000',
+      "SUMMARY:Rowan's 1st Birthday — A Hole in ONE!",
+      'LOCATION:Old Honeycutt Road Park',
+      "DESCRIPTION:Join us to celebrate Rowan's first birthday!",
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].join('\r\n');
+    const a = document.createElement('a');
+    a.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics);
+    a.download = 'rowans-birthday.ics';
+    a.click();
+  }
+
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw0w5WuqT8Uk2Q5m572fdgdj9yuuzglpZ4CbQsLvU-UcOyVECcizKTWnak03vGWSDHL/exec';
 
   function toggleGuests() {
