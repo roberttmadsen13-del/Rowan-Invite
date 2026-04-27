@@ -560,8 +560,7 @@
 </div><!-- /wrap -->
 
 <script>
-  // Sign up free at formspree.io → New Form → paste your endpoint below
-  const FORMSPREE_URL = 'PASTE_YOUR_FORMSPREE_URL_HERE';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw0w5WuqT8Uk2Q5m572fdgdj9yuuzglpZ4CbQsLvU-UcOyVECcizKTWnak03vGWSDHL/exec';
 
   function toggleGuests() {
     const attending = document.getElementById('attending').value;
@@ -586,17 +585,16 @@
     btn.disabled = true;
 
     try {
-      await fetch(FORMSPREE_URL, {
+      await fetch(SCRIPT_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name,
           attending: attending === 'yes' ? 'Yes' : 'No',
           guests: attending === 'yes' ? guests : 'N/A',
           note: note || 'None',
-          _subject: attending === 'yes'
-            ? `⛳ RSVP YES — ${name} (${guests})`
-            : `🚫 RSVP No — ${name}`
+          timestamp: new Date().toLocaleString('en-US', { timeZone: 'America/New_York' })
         })
       });
     } catch (e) { /* network error — submission may still land */ }
