@@ -392,7 +392,6 @@
     .headline-band, .scorecard-section, .leaderboard, .rsvp-section { padding-left: 1.2rem; padding-right: 1.2rem; }
     .scorecard-grid { grid-template-columns: 1fr; }
     .board-row { grid-template-columns: 2rem 1fr auto; }
-    .score-badge { display: none; }
   }
 </style>
 </head>
@@ -432,7 +431,7 @@
         </div>
         <div class="score-cell">
           <div class="label">📍 Course</div>
-          <div class="value">Old Honeycutt Road Park</div>
+          <div class="value"><a href="https://maps.google.com/?q=Old+Honeycutt+Road+Park" target="_blank" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">Old Honeycutt Road Park</a></div>
           <div class="par">The home course</div>
         </div>
         <div class="score-cell">
@@ -513,6 +512,17 @@
         </div>
 
         <div class="form-row">
+          <label class="form-label" for="attending">Will you be joining us?</label>
+          <div class="select-wrap">
+            <select class="form-select" id="attending" onchange="toggleGuests()">
+              <option value="">Select one</option>
+              <option value="yes">Yes, we'll be there!</option>
+              <option value="no">Sorry, can't make it</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row" id="guestsRow" style="display:none;">
           <label class="form-label" for="guests">Number in Your Party</label>
           <div class="select-wrap">
             <select class="form-select" id="guests">
@@ -532,12 +542,12 @@
           <input class="form-input" type="text" id="note" placeholder="Dietary needs, a note for Rowan..." />
         </div>
 
-        <button class="rsvp-btn" onclick="submitRSVP()">Confirm My Spot on the Greens ⛳</button>
+        <button class="rsvp-btn" id="rsvpBtn" onclick="submitRSVP()">Confirm My Spot on the Greens ⛳</button>
       </div>
 
       <div class="success-msg" id="successMsg">
-        <div class="big">🏌️</div>
-        <p>You're on the card! See you on the course.</p>
+        <div class="big" id="successIcon">🏌️</div>
+        <p id="successText">You're on the card! See you on the course.</p>
       </div>
     </div>
 
@@ -550,45 +560,54 @@
 </div><!-- /wrap -->
 
 <script>
-  // ── PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE ──
-  const SCRIPT_URL = 'PASTE_YOUR_WEB_APP_URL_HERE';
+  // Sign up free at formspree.io → New Form → paste your endpoint below
+  const FORMSPREE_URL = 'PASTE_YOUR_FORMSPREE_URL_HERE';
+
+  function toggleGuests() {
+    const attending = document.getElementById('attending').value;
+    document.getElementById('guestsRow').style.display = attending === 'yes' ? 'block' : 'none';
+    document.getElementById('rsvpBtn').textContent = attending === 'no'
+      ? 'Send My Regrets'
+      : 'Confirm My Spot on the Greens ⛳';
+  }
 
   async function submitRSVP() {
-    const name   = document.getElementById('name').value.trim();
-    const guests = document.getElementById('guests').value;
-    const note   = document.getElementById('note').value.trim();
+    const name      = document.getElementById('name').value.trim();
+    const attending = document.getElementById('attending').value;
+    const guests    = document.getElementById('guests').value;
+    const note      = document.getElementById('note').value.trim();
 
-    if (!name) {
-      alert('Please enter your name so we know who to expect!');
-      return;
-    }
-    if (!guests) {
-      alert('Please select how many are coming in your group.');
-      return;
-    }
+    if (!name) { alert('Please enter your name!'); return; }
+    if (!attending) { alert('Please let us know if you can make it.'); return; }
+    if (attending === 'yes' && !guests) { alert('Please select how many are coming.'); return; }
 
-    const btn = document.querySelector('.rsvp-btn');
+    const btn = document.getElementById('rsvpBtn');
     btn.textContent = 'Sending…';
     btn.disabled = true;
 
     try {
-      await fetch(SCRIPT_URL, {
+      await fetch(FORMSPREE_URL, {
         method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({
           name,
-          guests,
+          attending: attending === 'yes' ? 'Yes' : 'No',
+          guests: attending === 'yes' ? guests : 'N/A',
           note: note || 'None',
-          timestamp: new Date().toLocaleString('en-US', { timeZone: 'America/New_York' })
+          _subject: attending === 'yes'
+            ? `⛳ RSVP YES — ${name} (${guests})`
+            : `🚫 RSVP No — ${name}`
         })
       });
-    } catch (e) {
-      // no-cors means we can't read the response — that's fine, it still goes through
-    }
+    } catch (e) { /* network error — submission may still land */ }
 
     document.getElementById('rsvpForm').style.display = 'none';
-    document.getElementById('successMsg').classList.add('show');
+    const msg = document.getElementById('successMsg');
+    document.getElementById('successIcon').textContent = attending === 'yes' ? '🏌️' : '💌';
+    document.getElementById('successText').textContent = attending === 'yes'
+      ? "You're on the card! See you on the course."
+      : "We'll miss you — thanks for letting us know.";
+    msg.classList.add('show');
   }
 </script>
 
