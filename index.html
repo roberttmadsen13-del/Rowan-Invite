@@ -264,104 +264,6 @@
   .ace     { background: rgba(184,40,40,0.2);  color: #e88;       border: 1px solid var(--red); }
   .par-badge { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.15); }
 
-  /* ── RSVP ── */
-  .rsvp-section {
-    background: var(--cream);
-    padding: 1.8rem 2rem 2rem;
-  }
-  .rsvp-intro {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 1.05rem;
-    color: var(--ink-mid);
-    text-align: center;
-    margin-bottom: 1.4rem;
-  }
-
-  .form-row {
-    margin-bottom: 1rem;
-  }
-  .form-label {
-    display: block;
-    font-size: 0.62rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--green);
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 600;
-    margin-bottom: 0.4rem;
-  }
-  .form-input, .form-select {
-    width: 100%;
-    padding: 0.7rem 0.9rem;
-    border: 1px solid var(--tan);
-    border-radius: 2px;
-    background: var(--linen);
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.05rem;
-    color: var(--ink);
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    appearance: none;
-  }
-  .form-input:focus, .form-select:focus {
-    border-color: var(--green);
-    box-shadow: 0 0 0 3px rgba(30,77,43,0.12);
-  }
-  .select-wrap {
-    position: relative;
-  }
-  .select-wrap::after {
-    content: '▾';
-    position: absolute;
-    right: 0.9rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--gold);
-    pointer-events: none;
-    font-size: 0.9rem;
-  }
-
-  .rsvp-btn {
-    width: 100%;
-    margin-top: 0.5rem;
-    padding: 1rem;
-    background: var(--green);
-    color: var(--cream);
-    border: none;
-    border-radius: 2px;
-    font-family: 'Playfair Display', serif;
-    font-size: 1.15rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.15s;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-  }
-  .rsvp-btn:hover {
-    background: var(--green-mid);
-    transform: translateY(-1px);
-  }
-  .rsvp-btn:active { transform: translateY(0); }
-
-  .success-msg {
-    display: none;
-    text-align: center;
-    padding: 1.5rem;
-    background: var(--green-pale);
-    border: 1px solid var(--green-light);
-    border-radius: 2px;
-  }
-  .success-msg.show { display: block; }
-  .success-msg .big { font-size: 2.5rem; }
-  .success-msg p {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    color: var(--green);
-    font-size: 1.1rem;
-    margin-top: 0.5rem;
-  }
-
   /* ── FOOTER BAND ── */
   .footer-band {
     background: var(--green);
@@ -394,7 +296,7 @@
 
   @media (max-width: 480px) {
     body { padding: 1rem 0.5rem 3rem; }
-    .headline-band, .scorecard-section, .leaderboard, .rsvp-section { padding-left: 1.2rem; padding-right: 1.2rem; }
+    .headline-band, .scorecard-section, .leaderboard { padding-left: 1.2rem; padding-right: 1.2rem; }
     .scorecard-grid { grid-template-columns: 1fr; }
     .board-row { grid-template-columns: 2rem 1fr auto; }
   }
@@ -505,57 +407,6 @@
 
     </div>
 
-    <!-- RSVP -->
-    <div class="rsvp-section">
-      <div class="section-rule"><span>RSVP</span></div>
-      <p class="rsvp-intro">Confirm your spot on the greens — we'd love to see you out there.</p>
-
-      <div id="rsvpForm">
-        <div class="form-row">
-          <label class="form-label" for="name">Your Name</label>
-          <input class="form-input" type="text" id="name" placeholder="e.g. The Johnson Family" />
-        </div>
-
-        <div class="form-row">
-          <label class="form-label" for="attending">Will you be joining us?</label>
-          <div class="select-wrap">
-            <select class="form-select" id="attending" onchange="toggleGuests()">
-              <option value="">Select one</option>
-              <option value="yes">Yes, we'll be there!</option>
-              <option value="no">Sorry, can't make it</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-row" id="guestsRow" style="display:none;">
-          <label class="form-label" for="guests">Number in Your Party</label>
-          <div class="select-wrap">
-            <select class="form-select" id="guests">
-              <option value="">How many are joining you?</option>
-              <option value="1">Just me — 1 golfer</option>
-              <option value="2">2 in our group</option>
-              <option value="3">3 in our group</option>
-              <option value="4">4 in our group</option>
-              <option value="5">5 in our group</option>
-              <option value="6">6+ in our group</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <label class="form-label" for="note">Message for the Club (optional)</label>
-          <input class="form-input" type="text" id="note" placeholder="Dietary needs, a note for Rowan..." />
-        </div>
-
-        <button class="rsvp-btn" id="rsvpBtn" onclick="submitRSVP()">Confirm My Spot on the Greens ⛳</button>
-      </div>
-
-      <div class="success-msg" id="successMsg">
-        <div class="big" id="successIcon">🏌️</div>
-        <p id="successText">You're on the card! See you on the course.</p>
-      </div>
-    </div>
-
     <!-- FOOTER -->
     <div class="footer-band">
       <p>Old Honeycutt Road Park · In honour of Rowan's First Year</p>
@@ -582,54 +433,6 @@
     a.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics);
     a.download = 'rowans-birthday.ics';
     a.click();
-  }
-
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw0w5WuqT8Uk2Q5m572fdgdj9yuuzglpZ4CbQsLvU-UcOyVECcizKTWnak03vGWSDHL/exec';
-
-  function toggleGuests() {
-    const attending = document.getElementById('attending').value;
-    document.getElementById('guestsRow').style.display = attending === 'yes' ? 'block' : 'none';
-    document.getElementById('rsvpBtn').textContent = attending === 'no'
-      ? 'Send My Regrets'
-      : 'Confirm My Spot on the Greens ⛳';
-  }
-
-  async function submitRSVP() {
-    const name      = document.getElementById('name').value.trim();
-    const attending = document.getElementById('attending').value;
-    const guests    = document.getElementById('guests').value;
-    const note      = document.getElementById('note').value.trim();
-
-    if (!name) { alert('Please enter your name!'); return; }
-    if (!attending) { alert('Please let us know if you can make it.'); return; }
-    if (attending === 'yes' && !guests) { alert('Please select how many are coming.'); return; }
-
-    const btn = document.getElementById('rsvpBtn');
-    btn.textContent = 'Sending…';
-    btn.disabled = true;
-
-    try {
-      await fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name,
-          attending: attending === 'yes' ? 'Yes' : 'No',
-          guests: attending === 'yes' ? guests : 'N/A',
-          note: note || 'None',
-          timestamp: new Date().toLocaleString('en-US', { timeZone: 'America/New_York' })
-        })
-      });
-    } catch (e) { /* network error — submission may still land */ }
-
-    document.getElementById('rsvpForm').style.display = 'none';
-    const msg = document.getElementById('successMsg');
-    document.getElementById('successIcon').textContent = attending === 'yes' ? '🏌️' : '💌';
-    document.getElementById('successText').textContent = attending === 'yes'
-      ? "You're on the card! See you on the course."
-      : "We'll miss you — thanks for letting us know.";
-    msg.classList.add('show');
   }
 </script>
 
